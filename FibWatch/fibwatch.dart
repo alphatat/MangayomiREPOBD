@@ -1,8 +1,8 @@
 import 'package:mangayomi/bridge_lib.dart';
 import 'dart:convert';
 
-class UHDMovies extends MProvider {
-  UHDMovies({required this.source});
+class FibWatch extends MProvider {
+  FibWatch({required this.source});
 
   MSource source;
 
@@ -14,7 +14,7 @@ class UHDMovies extends MProvider {
   @override
   String get baseUrl => getPreferenceValue(source.id, "pref_domain_new");
 
-  @override
+  @override 
   Future<MPages> getPopular(int page) async {
     final res = (await client.get(Uri.parse("$baseUrl/page/$page"))).body;
     return animeFromElement(res);
@@ -138,10 +138,10 @@ class UHDMovies extends MProvider {
         key: "pref_domain_new",
         title: "Currently used domain",
         summary: "",
-        value: "https://uhdmovies.fans",
+        value: "https://FibWatch.fans",
         dialogTitle: "Currently used domain",
         dialogMessage: "",
-        text: "https://uhdmovies.fans",
+        text: "https://FibWatch.fans",
       ),
     ];
   }
@@ -250,6 +250,6 @@ class UHDMovies extends MProvider {
   }
 }
 
-UHDMovies main(MSource source) {
-  return UHDMovies(source: source);
+FibWatch main(MSource source) {
+  return FibWatch(source: source);
 }
