@@ -44,27 +44,40 @@ class FibWatch extends MProvider {
     if (description.isNotEmpty) {
       anime.description = description.first;
     }
-    anime.status = MStatus.ongoing;
+      // Chapter setup
+    final onclickValues = xpath(res, '//a[@class="hidden-button buttonDownloadnew"]/@onclick');
+    String? finalUrl;
+  
+    if (onclickValues.isNotEmpty) {
+      String onclick = onclickValues.first.replaceAll("&amp;", "&"); // decode HTML entity
+      finalUrl = substringAfter(onclick, "url=");
+      if (finalUrl.contains("'")) {
+        finalUrl = substringBefore(finalUrl, "'");
+      }
+    }
+
+    anime.status = MStatus.finished; // Default status, can be changed based on actual data
+
     MChapter watch = MChapter();
     watch.name = "Watch";
-    watch.url = xpath(res, '//a[@class="hidden-button buttonDownloadnew"]/@onclick');
+    watch.url = finalUrl ?? "";
+    watch.episodeNumber = 0.0;
     watch.chapterNumber = 0.0;
 
-    anime.chapters = watch.toList();
+    anime.chapters = [watch];
     return anime;
   }
 
   @override
   Future<List<MVideo>> getVideoList(String url) async {
 
-    final links = substringAfter(url, "url=");
     List<MVideo> videos = [];
   
-    for (var link in links) {
+    for (url.isNotEmpty) {
       MVideo video = MVideo();
       video
-        ..url = link
-        ..originalUrl = link
+        ..url = url
+        ..originalUrl = url
         ..quality = "Direct";
       videos.add(video);
     }
