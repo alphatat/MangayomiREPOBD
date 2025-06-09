@@ -47,7 +47,7 @@ class FibWatch extends MProvider {
     anime.status = MStatus.ongoing;
     MChapter watch = MChapter();
     watch.name = "Watch";
-    watch.url = xpath(res, '//a[@id="specialButton" and @href="/download.php"]/@onclick');
+    watch.url = xpath(res, '//a[@class="hidden-button buttonDownloadnew"]/@onclick');
     watch.chapterNumber = 0.0;
 
     anime.chapters = watch.toList();
