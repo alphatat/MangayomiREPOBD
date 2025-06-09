@@ -56,7 +56,7 @@ class FibWatch extends MProvider {
       }
     }
 
-    anime.status = MStatus.finished; // Default status, can be changed based on actual data
+    anime.status = MStatus.ongoing; // Default status, can be changed based on actual data
 
     MChapter watch = MChapter();
     watch.name = "Watch";
@@ -73,7 +73,7 @@ class FibWatch extends MProvider {
 
     List<MVideo> videos = [];
   
-    for (url.isNotEmpty) {
+    if (url.isNotEmpty) {
       MVideo video = MVideo();
       video
         ..url = url
