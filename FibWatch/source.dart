@@ -1,7 +1,7 @@
 import '../../../../../model/source.dart';
 
 Source get fibwatchSource => _fibwatchSource;
-const _fibwatchVersion = "0.0.1";
+const _fibwatchVersion = "0.0.2";
 const _fibwatchSourceCodeUrl =
     "https://raw.githubusercontent.com/alphatat/MangayomiREPOBD/refs/heads/main/FibWatch/fibwatch.dart";
 Source _fibwatchSource = Source(
