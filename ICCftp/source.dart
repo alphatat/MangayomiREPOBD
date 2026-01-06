@@ -10,7 +10,7 @@ Source _iccftpSource = Source(
   lang: "bn",
   typeSource: "single",
   iconUrl:
-      "https://raw.githubusercontent.com/alphatat/MangayomiREPOBD/refs/heads/main/ICCftp/icon.png",
+      "https://raw.githubusercontent.com/alphatat/MangayomiREPOBD/refs/heads/main/ICCftp/icon.svg",
   sourceCodeUrl: _iccftpSourceCodeUrl,
   version: _iccftpVersion,
   itemType: ItemType.anime,
