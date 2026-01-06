@@ -166,32 +166,61 @@ class BdixICCFtpProvider extends MProvider {
   Future<MPages> search(String query, int page, FilterList filterList) async {
     if (query.isEmpty) return MPages([], false);
 
-    final searchUrl = "${source.baseUrl}command.php?cSearch=${Uri.encodeQueryComponent(query)}";
-
-    final res = await client.get(Uri.parse(searchUrl));
-
-    final List<dynamic> jsonData = jsonDecode(res.body);
-    final List<MManga> items = [];
-
-    for (var item in jsonData) {
-      final map = item as Map<String, dynamic>;
-      final id = map["id"]?.toString();
-      final name = map["name"]?.toString()?.trim() ?? "";
-      final image = map["image"]?.toString();
-
-      if (name.isEmpty || id == null) continue;
-
-      final MManga manga = MManga();
-      manga.link = "${source.baseUrl}player.php?play=$id";
-      manga.name = name;
-      if (image != null && image.isNotEmpty) {
-        manga.imageUrl = "${source.baseUrl}files/$image";
+    // Determine base URL: use one with session if extracted, else fallback
+    String baseUrlForSearch = source.baseUrl;
+    if (newUrl.contains("session=")) {
+      // Extract clean base from newUrl (e.g., http://10.16.100.244/)
+      final int dashIndex = newUrl.indexOf("dashboard.php");
+      if (dashIndex != -1) {
+        baseUrlForSearch = newUrl.substring(0, dashIndex);
       }
-
-      items.add(manga);
     }
 
-    return MPages(items, false);
+    final String searchUrl = "$baseUrlForSearch/command.php";
+
+    // POST body exactly like Kotlin provider
+    final String postBody = "cSearch=$query";
+
+    try {
+      final res = await client.post(
+        Uri.parse(searchUrl),
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: postBody,
+      );
+
+      // Debug: temporarily uncomment to see response
+      // print("Search response body: ${res.body}");
+
+      if (res.body.trim().isEmpty || !res.body.trim().startsWith("[")) {
+        return MPages([], false);
+      }
+
+      final List<dynamic> jsonData = jsonDecode(res.body);
+      final List<MManga> items = [];
+
+      for (var item in jsonData) {
+        if (item is! Map<String, dynamic>) continue;
+
+        final String? id = item["id"]?.toString();
+        final String name = (item["name"]?.toString() ?? "").trim();
+        final String? image = item["image"]?.toString();
+
+        if (name.isEmpty || id == null) continue;
+
+        final MManga manga = MManga();
+        manga.link = "$baseUrlForSearch/player.php?play=$id";
+        manga.name = name;
+        if (image != null && image.isNotEmpty) {
+          manga.imageUrl = "$baseUrlForSearch/files/$image";
+        }
+
+        items.add(manga);
+      }
+
+      return MPages(items, false);
+    } catch (e) {
+      return MPages([], false);
+    }
   }
 
   @override
