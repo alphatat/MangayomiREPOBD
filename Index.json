@@ -27,7 +27,7 @@
     "baseUrl": "http://10.16.100.244/",
     "lang": "bn",
     "typeSource": "single",
-    "iconUrl": "https://raw.githubusercontent.com/alphatat/MangayomiREPOBD/refs/heads/main/ICCftp/icon.svg",
+    "iconUrl": "https://raw.githubusercontent.com/alphatat/MangayomiREPOBD/refs/heads/main/ICCftp/icon.png",
     "dateFormat": "",
     "dateFormatLocale": "",
     "isNsfw": false,
